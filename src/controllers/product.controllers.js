@@ -48,3 +48,48 @@ exports.getProducts = async (_req, res, next)=>{
     }
 };
 
+exports.getProduct = async (req, res, next)=>{
+    try{
+        const {uuid} = req.params;
+        const data = await productServices.getProduct(uuid);
+        if(_.isNil(data)){
+            return res.status(400).json({
+                success: false, 
+                data: 'Product not found'
+            });
+        }
+        res.status(200).json({
+            success: true,
+            data: data
+        });
+    }catch(err){
+        next(err); 
+    }
+};
+
+exports.deleteProduct = async (req, res, next) => {
+    try{
+        if(!admin){
+            return res.status(400).json({ 
+                error: -1, 
+                message: `route ${req.baseUrl} method ${req.method} Not authorized` 
+            });
+        }
+        const {uuid} = req.params;
+        const data = await productServices.deleteProduct(uuid);
+        if(_.isNil(data)){
+            return res.status(400).json({
+                success: false, 
+                message: 'Product not found'
+            });
+            
+        };
+        res.status(200).json({
+            success: true,
+            message: `Product uuid: ${uuid} deleted`
+        });
+    }catch(err){
+        next(err);
+    }
+};
+

@@ -1,5 +1,6 @@
 const { Router } = require('express');
-const productRouter = require('./product/product.routes')
+const productRouter = require('./product/product.routes');
+const cartRouter = require('./cart/cart.routes');
 
 const router = Router();
 
@@ -9,6 +10,7 @@ router.get('/health', (_req, res) => {
         enviroment: process.env.ENVIROMENT || 'Undefined'
     });
 })
-.use('/', productRouter)
+.use('/products', productRouter)
+.use('/carts', cartRouter)
 
 module.exports = router;
