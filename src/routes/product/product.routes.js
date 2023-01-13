@@ -1,13 +1,17 @@
 const {Router} = require('express');
 const {
   createProduct,
-  getProducts
+  getProducts,
+  getProduct,
+  deleteProduct
 } = require ('../../controllers/product.controllers');
 
 const router = Router();
 
 router
 .post('/', createProduct)
-.get('/', getProducts);
+.get('/', getProducts)
+.get('/:uuid', getProduct)
+.delete('/:uuid', deleteProduct)
 
 module.exports = router;
