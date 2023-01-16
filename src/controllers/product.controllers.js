@@ -39,11 +39,11 @@ exports.createProduct =  async (req, res, next)=>{
 exports.getProducts = async (_req, res, next)=>{
     try{
         const data = await productServices.getProducts();
-    /*     res.status(200).json({
+         res.status(200).json({
             success: true,
             data: data
-        }); */
-        res.render('index.ejs', {options: data})
+        }); 
+        //res.render('index.ejs', {options: data})
     }catch(err){
         next(err); 
     }
