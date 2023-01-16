@@ -20,7 +20,7 @@ class MongoContainer {
             }
             return await this.model.find().populate({
                 path: 'products',
-                select: '-_id, name'
+                select: '-_id, name, image'
             })
         }catch(err){
             throw new Error(err.message);
@@ -36,7 +36,7 @@ class MongoContainer {
             if(item.products){
                 return item.populate({
                     path: 'products',
-                    select: '-_id, name'
+                    select: '-_id, name, image'
                 })
             }
 

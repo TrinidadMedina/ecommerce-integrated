@@ -1,4 +1,4 @@
-const productServices = require('../services/product.services.js');
+const productServices = require('../services/product/product.services.js');
 const _ = require('lodash');
 
 //let admin = false;

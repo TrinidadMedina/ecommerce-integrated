@@ -1,6 +1,6 @@
 const {v4 : uuidv4} = require('uuid');
-const DaoService = require('../daos/product.daos');
-const { deleteProduct } = require('./cart.services');
+const DaoService = require('../../daos/product.daos');
+const { deleteProduct } = require('../cart/cart.services');
 
 class ProductServices {
     constructor() {

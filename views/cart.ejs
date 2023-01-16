@@ -14,7 +14,7 @@
       </div>
       <div class="col">
         <button>
-          <a href="/cart" class="text-decoration-none">View Cart</a>
+          <a href="/home" class="text-decoration-none">Home</a>
         </button>
         <button>
           <a href="/signout" class="text-decoration-none">Exit</a>
@@ -30,23 +30,24 @@
                 No se encontraron productos
               </div>
             <% }else{ %>
-              <h5 class="text-center">Productos</h5>
+              <h5 class="text-center">Tus carro</h5>
               <br>
               <table class="table">
                 <thead>
                   <tr>
                     <th>Nombre</th>
-                    <th>Precio</th>
-                    <th>Foto</th>
+                    <th>Productos</th>
                   </tr>
                 </thead>
                 <tbody id="productsList">
                   <% options.forEach(i=>{ %>
                     <tr>
-                      <td><%= i.name %></td>
-                      <td><%= i.price %></td>
-                      <td><img class="img-fluid" style='width: 35px' src=<%= i.image %> ></td>
-                      <td><button>+</button></td>
+                        <td><%= i.name %></td>
+                        <td>
+                            <% i.products.forEach(p=>{ %>
+                                <img class="img-fluid" style='width: 35px' src= <%= p.image %> >
+                            <% }) %>
+                        </td>
                     </tr>
                   <% }) %>
                 </tbody>
