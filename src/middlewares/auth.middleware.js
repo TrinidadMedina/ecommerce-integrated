@@ -1,8 +1,8 @@
 const authMiddleware = (req, res, next) => {
-    if(!req.session.username && !req.session.isAuth){
-        return res.redirect('/signin');
+    if(req.isAuthenticated()){
+        return next();
     }
-    next();
+    res.redirect('/signin');
 };
 
 module.exports = authMiddleware;
