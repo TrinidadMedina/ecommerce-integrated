@@ -2,7 +2,8 @@ const router = require('express').Router();
 const pagesRouter = require('./pages/pages.routes');
 const sessionRouter = require('./session/session.routes');
 const cartRouter = require('./cart/cart.routes');
-const productRoutes = require('./product/product.routes');
+const productRouter = require('./product/product.routes');
+const infoRouter = require('./info/info.routes')
 
 router.get('/health', (_req, res) => {
     res.status(200).json({
@@ -13,7 +14,7 @@ router.get('/health', (_req, res) => {
 .use(pagesRouter)
 .use(sessionRouter)
 .use('/carts', cartRouter)
-.use('/products', productRoutes);
-
+.use('/products', productRouter)
+.use('/info', infoRouter);
 
 module.exports = router;
