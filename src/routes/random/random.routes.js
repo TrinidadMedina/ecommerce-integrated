@@ -1,17 +1,13 @@
 const router = require('express').Router();
-const _ = require('lodash');
+const {fork} = require('child_process');
 
 router.get('/randoms', (req, res) => {
-    let {cant} = req.query;
-    if(_.isUndefined(cant)){
-        cant = 100000000
-    };
-    let randomNumbers = {};
-    for (let i = 0; i < cant; i++){
-        const num = Math.floor(Math.random() * (1000 - 1) + 1);
-        randomNumbers[num] ? randomNumbers[num] += 1 : randomNumbers[num] = 1;
-    }
-    res.status(200).json({randomNumbers});
+    const cant = req.query.cant || 100000000
+    const forked = fork(process.cwd() + '/src/services/random/random.services.js')
+    forked.send(cant);
+    forked.on('message', (randomNumbers) => {
+      res.status(200).json({randomNumbers})
+    });
 });
 
 module.exports = router;
