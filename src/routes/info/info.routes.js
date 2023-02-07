@@ -9,7 +9,8 @@ router.get('/', (_req, res) => {
         "Process Id" : process.pid,
         "Node Version" : process.version,
         "Project Folder" : process.cwd(),
-        "Rss" : process.memoryUsage().rss
+        "Rss" : process.memoryUsage().rss,
+        "N° CPUs": require('os').cpus().length
     };
 
     res.send(info);
