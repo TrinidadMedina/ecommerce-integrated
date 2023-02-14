@@ -11,5 +11,3 @@ router.get('/randoms', (req, res) => {
 });
 
 module.exports = router;
-
-/* Esta ruta no será bloqueante (utilizar el método fork de child process). Comprobar el no bloqueo con una cantidad de 500.000.000 de randoms. */
