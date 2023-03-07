@@ -19,7 +19,7 @@ require('dotenv').config();
 
 const app = express();
 
-const COOKIES_SECRET = process.env.COOKIES_SECRET || 'default';
+const COOKIES_SECRET = process.env.VITE_COOKIES_SECRET || 'default';
 
 app.use(compression())
 
