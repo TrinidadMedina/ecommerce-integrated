@@ -6,6 +6,7 @@ const logger = require('morgan');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const md5 = require('md5');
+const compression = require('compression');
 
 const mongooseConnect = require('./src/services/mongo/connect');
 const { getStoreConfig } = require('./src/services/session/session.config');
@@ -19,6 +20,8 @@ require('dotenv').config();
 const app = express();
 
 const COOKIES_SECRET = process.env.COOKIES_SECRET || 'default';
+
+app.use(compression())
 
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
