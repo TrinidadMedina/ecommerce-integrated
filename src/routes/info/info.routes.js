@@ -10,6 +10,7 @@ router.get('/', (_req, res) => {
         "Node Version" : process.version,
         "Project Folder" : process.cwd(),
         "Rss" : process.memoryUsage().rss,
+        "Memory usage" : process.memoryUsage(),
         "N° CPUs": require('os').cpus().length
     };
 
