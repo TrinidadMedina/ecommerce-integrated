@@ -4,7 +4,7 @@ const productServices = require('../../services/product/product.services');
 const cartServices = require('../../services/cart/cart.services')
 
 
-router.get('/signin', (req, res) => {
+router.get('/', (req, res) => {
     if(req.isAuthenticated()){
         return res.redirect('/home')
     }
