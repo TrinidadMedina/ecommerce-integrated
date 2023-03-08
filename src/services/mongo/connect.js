@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const { getMongoConfig } = require('../session/session.config');
 
 const mongooseConnect = () => {
-    const MONGO_URI = process.env.VITE_MONGO_URI;
+    const MONGO_URI = process.env.MONGO_URI;
     mongoose.set("strictQuery", false);
     mongoose.connect(MONGO_URI, getMongoConfig()).then(() => {
         console.info('Mongoose connection ok');

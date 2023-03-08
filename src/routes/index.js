@@ -9,7 +9,7 @@ const randomRouter = require('./random/random.routes')
 router.get('/health', (_req, res) => {
     res.status(200).json({
         health: 'up',
-        enviroment: process.env.VITE_ENVIROMENT || 'Undefined'
+        enviroment: process.env.ENVIROMENT || 'Undefined'
     });
 })
 .use(pagesRouter)

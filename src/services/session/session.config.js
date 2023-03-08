@@ -6,7 +6,7 @@ const getMongoConfig = () => {
 };
 
 const getStoreConfig = () => {
-    const MONGO_URI = process.env.VITE_MONGO_URI;
+    const MONGO_URI = process.env.MONGO_URI;
     return {
         mongoUrl: MONGO_URI,
         ttl: 300,
