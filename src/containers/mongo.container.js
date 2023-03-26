@@ -1,3 +1,5 @@
+const _ = require('lodash')
+
 class MongoContainer {
 
     constructor(model, productModel) {
@@ -7,39 +9,57 @@ class MongoContainer {
 
     async create(data) {
         try{
-            return await this.model.create(data);
+            const cart = await this.model.findOne({user: data.user});
+            if(!cart){
+                return await this.model.create(data);
+            }
+            const prod = cart.products.filter(prod => prod.product == data.products.product[0]);
+
+            if(!_.isEmpty(prod)){
+                  return 'Producto ya existe en tu carro'
+            }else{
+                //console.log(data.user, data.products.product)
+                await this.model.updateOne({_id: cart._id}, { $push: {products: { product: data.products.product[0] }} });
+                return
+            }
         }catch(err){
             throw new Error(err.message);
         }
     };
 
-    async getAll() {
+    async createProduct(data) {
+        try{
+            const product = await this.model.findOne({name: data.name});
+            if(product){
+                return 'Producto ya existe en el catálogo'
+            }
+            return await this.model.create(data);
+        }catch(err){
+
+        }
+    }
+
+    async getAll(userId) {
         try{
             if(this.productModel === undefined){
                 return await this.model.find();
-            }
-            return await this.model.find().populate({
-                path: 'products',
-                select: '-_id, name, image'
-            })
+            } 
+            const cart = await this.model.findOne({user: userId}).populate('products.product');
+            return [cart]
         }catch(err){
             throw new Error(err.message);
         }   
     };
 
-    async getOne(uuid) {
+    async getOne(id) {
         try{
-            const item = await this.model.findOne({uuid: uuid});
+            const item = await this.model.findOne({_id: id});
             if (!item){
                 return null
             }
             if(item.products){
-                return item.populate({
-                    path: 'products',
-                    select: '-_id, name, image'
-                })
+                return item.populate('products.product');
             }
-
             return item
         }catch(err){
             throw new Error(err.message);
@@ -55,35 +75,35 @@ class MongoContainer {
         }
     };
 
-    async insertProduct(cartUuid, productUuid) {
-        try{
-            const product = await this.productModel.findOne({uuid: productUuid});
-            if (!product){
-                return null;
-            }
-            const res = await this.model.updateOne({ uuid: cartUuid }, {$push: {products: product.id}});
-            if(res.matchedCount === 0){
-                return null;
-            }
-            const cartUpdated = await this.getOne(cartUuid);
-            return cartUpdated;
+    async insertProduct(userId, productId) {
+        try{ 
+            const cart = await this.model.findOne({user: userId});
+            const prod = cart.products.filter(prod => prod.product == productId[0]);
+            const updated = await this.model.findOneAndUpdate(
+                { _id: cart._id, "products._id": prod[0]._id }, // criterio de búsqueda
+                { $set: { "products.$.quant": prod[0].quant+1 } }, // actualización
+            );
+            return 'Producto agregado'
         }catch(err){
-            throw new Error(err.message);
+            console.log(err);
         }
     };
 
-    async deleteProduct(cartUuid, productUuid) {
+    async deleteProduct(userId, productId) {
         try{
-            const product = await this.productModel.findOne({uuid: productUuid});
-            if(!product){
-                return null
+            const cart = await this.model.findOne({user: userId});
+            const prod = cart.products.filter(prod => prod.product == productId[0]);
+            if(prod[0].quant == 1){
+                const updated = await this.model.updateOne({_id: cart._id}, { $pull: {products: { product: productId[0] }} });
+                return
             }
-            const res = await this.model.updateOne({uuid: cartUuid}, {$pull: {products: product.id}});
-            if(res.matchedCount === 0){
-                return null;
-            }
-            const cartUpdated = await this.getOne(cartUuid);
-            return cartUpdated;
+            const updated = await this.model.findOneAndUpdate(
+                { _id: cart._id, "products._id": prod[0]._id }, // criterio de búsqueda
+                { $set: { "products.$.quant": prod[0].quant-1 } }, // actualización
+                { new: true } // opción para devolver el documento actualizado
+            );
+            
+            return 'Producto eliminado'
         }catch(err){
             throw new Error(err);
         }

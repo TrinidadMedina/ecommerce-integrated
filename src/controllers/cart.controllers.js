@@ -6,39 +6,26 @@ let admin = true;
 
 exports.createCart =  async (req, res, next)=>{
     try{
-        const {body} = req;
         if(!admin){
             return res.status(400).json({ 
                 error: -1, 
                 message: `route ${req.baseUrl} method ${req.method} Not authorized` 
             });
-        };
-        if(_.isEmpty(body)){
-            return res.status(400).json({
-                success: false, 
-                message: 'Body data missing'
-            });
-        };
-        if (_.isNil(body.name)){
-            return res.status(400).json({
-                success: false, 
-                message: 'Name atributte missing'
-            });
-        };
-        
-        const data = await cartServices.createCart(body);
-        res.status(200).json({
-            success: true,
-            data: data
-        });
+        }; 
+        const userData = req.user; 
+        const productId = Object.values(req.body);    
+        const data = await cartServices.createCart(userData._id, productId);
+        res.redirect('/home')
     }catch(err){
        next(err) 
     } 
 };
 
-exports.getCarts = async (_req, res, next)=>{
+exports.getCarts = async (req, res, next)=>{
     try{
-        const data = await cartServices.getCarts();
+        const userData = req.user;
+        console.log(userData) 
+        const data = await cartServices.getCarts(userData._id);
         res.status(200).json({
             success: true,
             data: data
@@ -75,18 +62,10 @@ exports.insertProduct = async (req, res, next) => {
                 message: `Route ${req.baseUrl} method ${req.method} Not authorized` 
             });
         };
-        const {cartUuid, productUuid} = req.params;
-        const data = await cartServices.insertProduct(cartUuid, productUuid);
-        if(_.isNil(data)){
-            return res.status(400).json({
-                success: false, 
-                data: 'Item not found'
-            });
-        }
-        res.status(200).json({
-            success: true,
-            data: data
-        });
+        const productId = Object.values(req.body);  
+        const userData = req.user; 
+        const data = await cartServices.insertProduct(userData._id, productId);
+        res.redirect('/cart')
     }catch(err){
         next(err);
     }
@@ -94,24 +73,22 @@ exports.insertProduct = async (req, res, next) => {
 
 exports.deleteProduct = async (req, res, next)=>{
     try{
-        const {cartUuid, productUuid} = req.params;
         if(!admin){
             return res.status(400).json({ 
                 error: -1, 
                 message: `Route ${req.baseUrl} method ${req.method} Not authorized` 
             });
         };
-        const data = await cartServices.deleteProduct(cartUuid, productUuid);
-        if(_.isNil(data)){
+        const productId = Object.values(req.body);  
+        const userData = req.user; 
+        const data = await cartServices.deleteProduct(userData._id, productId);
+/*         if(_.isNil(data)){
             return res.status(400).json({
                 success: false, 
                 message: 'Item not found'
             });
-        };
-        res.status(200).json({
-            succes: true,
-            data: data
-        });  
+        }; */
+        res.redirect('/cart')  
     }catch(err){
        next(err) 
     } 

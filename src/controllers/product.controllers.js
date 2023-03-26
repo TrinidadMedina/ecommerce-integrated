@@ -51,9 +51,10 @@ exports.getProducts = async (_req, res, next)=>{
 
 exports.getProduct = async (req, res, next)=>{
     try{
-        const {uuid} = req.params;
-        const data = await productServices.getProduct(uuid);
-        if(_.isNil(data)){
+        const body = req.body.product
+        console.log(body)
+        //const data = await productServices.getProduct(uuid);
+ /*        if(_.isNil(data)){
             return res.status(400).json({
                 success: false, 
                 data: 'Product not found'
@@ -62,7 +63,8 @@ exports.getProduct = async (req, res, next)=>{
         res.status(200).json({
             success: true,
             data: data
-        });
+        }); */
+        res.redirect('/home')
     }catch(err){
         next(err); 
     }

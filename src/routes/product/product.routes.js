@@ -11,7 +11,7 @@ const router = Router();
 router
 .post('/', createProduct)
 .get('/', getProducts)
-.get('/:uuid', getProduct)
+.post('/product', getProduct)
 .delete('/:uuid', deleteProduct)
 
 module.exports = router;

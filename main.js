@@ -47,7 +47,6 @@ formPublicarMensaje.addEventListener('submit', e => {
 })
 
 socket.on('mensajes', mensajes => {
-    console.log(mensajes);
     const html = makeHtmlList(mensajes)
     document.getElementById('mensajes').innerHTML = html;
 })

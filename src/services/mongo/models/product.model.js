@@ -4,7 +4,6 @@ const productSchema = new Schema(
     {
         uuid: {
             type: String,
-            required: true
         }, 
         name: {
             type: String,

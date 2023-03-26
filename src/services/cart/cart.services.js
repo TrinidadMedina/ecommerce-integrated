@@ -6,16 +6,14 @@ class CartServices {
         this.dao = new DaoService();
     };
 
-    async createCart(data) {
-        Object.assign(data, {
-            uuid: uuidv4()
-        });
+    async createCart(userId, productId) {
+        const data = {uuid: uuidv4(), user: userId, products : {product: productId}};
         const newCart = await this.dao.create(data);
         return newCart;
     };
 
-    async getCarts() {
-        const carts = await this.dao.getAll();
+    async getCarts(userId) {
+        const carts = await this.dao.getAll(userId);
         return carts;
     };
 
@@ -24,13 +22,14 @@ class CartServices {
         return cart;
     };
 
-    async insertProduct(cartUuid, productUuid) {
-        const cart = await this.dao.insertProduct(cartUuid, productUuid);
+    async insertProduct(userId, productId) {
+        const cart = await this.dao.insertProduct(userId, productId);
+        console.log(1, cart)
         return cart;
     };
 
-    async deleteProduct(cartUuid, productUuid) {
-        const cart = await this.dao.deleteProduct(cartUuid, productUuid);
+    async deleteProduct(userId, productId) {
+        const cart = await this.dao.deleteProduct(userId, productId);
         return cart;
     };
 

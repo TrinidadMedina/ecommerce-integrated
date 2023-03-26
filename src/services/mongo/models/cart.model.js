@@ -1,5 +1,6 @@
 const { Schema, model } = require('mongoose');
-const productModel = require('./product.model')
+const productModel = require('./product.model');
+const userModel = require('./user.model');
 
 const cartSchema = new Schema({
     uuid: {
@@ -7,13 +8,19 @@ const cartSchema = new Schema({
         required: true,
         unique: true
     },
-    name: {
-        type: String,
-        required: true
-    },
-    products: [{ 
+    user: { 
         type: Schema.Types.ObjectId, 
-        ref: productModel 
+        ref: userModel 
+    },
+    products: [{
+        product: {
+            type: Schema.Types.ObjectId, 
+            ref: productModel 
+        },
+        quant: {
+            type: Number ,
+            default: 1
+        }       
     }],
     timestamp: {
         type: Date,

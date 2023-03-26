@@ -14,7 +14,7 @@ router.get('/health', (_req, res) => {
 })
 .use(pagesRouter)
 .use(sessionRouter)
-.use('/carts', cartRouter)
+.use('/cart', cartRouter)
 .use('/products', productRouter)
 .use('/info', infoRouter)
 .use('/api', randomRouter);

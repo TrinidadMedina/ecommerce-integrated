@@ -14,8 +14,8 @@ router
 .post('/', createCart)
 .get('/', getCarts)
 .get('/:uuid', getCart)
-.post('/:cartUuid/:productUuid', insertProduct)
-.delete('/:cartUuid/:productUuid', deleteProduct)
+.post('/insert', insertProduct)
+.post('/delete', deleteProduct)
 .delete('/:uuid', deleteCart)
 
 module.exports = router;

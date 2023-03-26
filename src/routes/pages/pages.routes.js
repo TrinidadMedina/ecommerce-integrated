@@ -23,14 +23,25 @@ router.get('/error', (_req, res) => {
 });
 
 router.get('/home', authMiddleware, async (req, res) => {
-    const userData = req.user
-    const data = await productServices.getProducts();
-    res.render('home', {options: data, fullname: userData.fullName});
+    try{
+        const userData = req.user;
+        const data = await productServices.getProducts();
+        res.render('home', {options: data, fullname: userData.username});
+    }catch(err){
+        console.error(err);
+        res.render('/');
+    }
 });
 
-router.get('/cart', async (_req, res) => {
-    const data = await cartServices.getCarts();
-    res.render('cart', {options: data});
+router.get('/cart', async (req, res) => {
+    try{
+        const userData = req.user;
+        const data = await cartServices.getCarts(userData._id);
+        res.render('cart', {options: data, fullname: userData.username});
+    }catch(err){
+        console.error(err);
+        res.render('/');
+    }
 });
 
 module.exports = router;

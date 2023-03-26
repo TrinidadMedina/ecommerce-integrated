@@ -1,6 +1,5 @@
 const {v4 : uuidv4} = require('uuid');
 const DaoService = require('../../daos/product.daos');
-const { deleteProduct } = require('../cart/cart.services');
 
 class ProductServices {
     constructor() {
@@ -11,7 +10,7 @@ class ProductServices {
         Object.assign(data, {
             uuid: uuidv4()
         });
-      const newProduct = await this.dao.create(data);
+      const newProduct = await this.dao.createProduct(data);
       return newProduct;
     };
 

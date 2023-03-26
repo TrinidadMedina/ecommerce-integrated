@@ -12,6 +12,10 @@ const mongooseConnect = require('./src/services/mongo/connect');
 const { getStoreConfig } = require('./src/services/session/session.config');
 const indexRouter = require('./src/routes/index');
 const errorHandler = require('./src/middlewares/errorHandler');
+const loggerConsole = require('./log4js').loggerConsole;
+const loggerFile = require('./log4js').loggerFile;
+
+
 
 const UserModel = require('./src/services/mongo/models/user.model');
 
@@ -22,6 +26,8 @@ const app = express();
 const COOKIES_SECRET = process.env.COOKIES_SECRET || 'default';
 
 app.use(compression());
+
+app.use(express.static('public'));
 
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
@@ -45,8 +51,12 @@ app.use(session({
 app.set('views', './views');
 app.set('view engine', 'ejs');
 
-passport.use('signin', new LocalStrategy(async (username, password, done) => {
-    const userData = await UserModel.findOne({username, password: md5(password)});
+passport.use('signin', new LocalStrategy({
+    usernameField: 'email',
+    passwordField: 'password'
+},
+async (email, password, done) => {
+    const userData = await UserModel.findOne({email:email, password: md5(password)});
     if(!userData){
        return done(null, false);
     }
@@ -54,16 +64,22 @@ passport.use('signin', new LocalStrategy(async (username, password, done) => {
 }));
 
 passport.use('signup', new LocalStrategy({
-    passReqToCallback: true
-}, async (req, username, password, done) => {
-    const userData = await UserModel.findOne({username, password: md5(password)});
+    passReqToCallback: true,
+    usernameField: 'email',
+    passwordField: 'password'
+}, async (req, email, password, done) => {
+    const userData = await UserModel.findOne({email: email, password: md5(password)});
     if(userData){
         return done(null, false);
     }
     const stageUser = new UserModel({
-        username,
+        email: req.body.email,
         password: md5(password),
-        fullName: req.body.fullName
+        username: req.body.username,
+        address: req.body.address,
+        age: req.body.age,
+        number: req.body.number,
+        photo: req.body.photo
     });
     const newUser = await stageUser.save();
     done(null, newUser);
